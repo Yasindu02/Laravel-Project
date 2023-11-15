@@ -21,6 +21,14 @@ class BookController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
         ]);
+
+        $existingBook = Book::where('title', $request->input('title'))
+        ->where('author', $request->input('author'))
+        ->first();
+
+        if ($existingBook) {
+            return back()->with('error', 'Book with the same title and author already exists');
+        }
     
         $book = Book::create($request->all());
     
